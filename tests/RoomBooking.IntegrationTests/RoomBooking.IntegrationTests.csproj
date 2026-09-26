@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\RoomBooking.Api\RoomBooking.Api.csproj" />
+    <ProjectReference Include="..\..\src\RoomBooking.Common\RoomBooking.Common.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/RoomBooking.Api/RoomBooking.Api.csproj" />
+    <Project Path="src/RoomBooking.BusinessContracts/RoomBooking.BusinessContracts.csproj" />
+    <Project Path="src/RoomBooking.BusinessServices/RoomBooking.BusinessServices.csproj" />
+    <Project Path="src/RoomBooking.Common/RoomBooking.Common.csproj" Id="a0e439d7-28e0-4172-8658-e980eee6d226" />
+    <Project Path="src/RoomBooking.DataAccess/RoomBooking.DataAccess.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/RoomBooking.IntegrationTests/RoomBooking.IntegrationTests.csproj" />
+    <Project Path="tests/RoomBooking.UnitTests/RoomBooking.UnitTests.csproj" />
+  </Folder>
+</Solution>

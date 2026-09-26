@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Scalar.AspNetCore" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RoomBooking.BusinessContracts\RoomBooking.BusinessContracts.csproj" />
+    <ProjectReference Include="..\RoomBooking.BusinessServices\RoomBooking.BusinessServices.csproj" />
+    <ProjectReference Include="..\RoomBooking.Common\RoomBooking.Common.csproj" />
+    <ProjectReference Include="..\RoomBooking.DataAccess\RoomBooking.DataAccess.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\RoomBooking.Api\RoomBooking.Api.csproj" />
+    <ProjectReference Include="..\..\src\RoomBooking.BusinessContracts\RoomBooking.BusinessContracts.csproj" />
+    <ProjectReference Include="..\..\src\RoomBooking.BusinessServices\RoomBooking.BusinessServices.csproj" />
+    <ProjectReference Include="..\..\src\RoomBooking.DataAccess\RoomBooking.DataAccess.csproj" />
+  </ItemGroup>
+
+</Project>

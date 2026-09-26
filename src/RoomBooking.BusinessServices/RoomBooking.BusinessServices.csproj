@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\RoomBooking.BusinessContracts\RoomBooking.BusinessContracts.csproj" />
+    <ProjectReference Include="..\RoomBooking.Common\RoomBooking.Common.csproj" />
+    <ProjectReference Include="..\RoomBooking.DataAccess\RoomBooking.DataAccess.csproj" />
+  </ItemGroup>
+
+</Project>
