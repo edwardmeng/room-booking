@@ -19,18 +19,29 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 10.0.x
+        dotnet-version: |
+          8.0.x
+          10.0.x
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
     - name: Test with coverage
-      run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./TestResults
+      run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage" --settings coverage.runsettings --results-directory ./TestResults
+    - name: Merge coverage reports
+      if: always()
+      uses: danielpalme/ReportGenerator-GitHub-Action@5.4.17
+      with:
+        reports: TestResults/**/coverage.cobertura.xml
+        targetdir: TestResults/Merged
+        reporttypes: Cobertura
     - name: Generate Coverage Report
+      if: always()
       uses: irongut/CodeCoverageSummary@v1.3.0
       with:
-        filename: TestResults/**/coverage.cobertura.xml
+        filename: TestResults/Merged/Cobertura.xml
         badge: true
+        fail_below_min: true
         format: markdown
         output: both
-
+        thresholds: '80 80'
