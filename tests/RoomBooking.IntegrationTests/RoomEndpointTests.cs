@@ -10,7 +10,7 @@ public sealed class RoomEndpointTests
     {
         await using var factory = new WebApplicationFactory();
         using var client = factory.CreateClient();
-        await IntegrationTestSupport.CreateReservationAsync(
+        _ = await IntegrationTestSupport.CreateReservationAsync(
             client,
             1,
             "Existing reservation",
@@ -30,7 +30,7 @@ public sealed class RoomEndpointTests
         Assert.Equal(
             new[] { "Auditorium", "Conference Room", "Small Room" },
             rooms.Select(room => room.GetProperty("name").GetString()).ToArray());
-        Assert.Equal(new[] { 50, 10, 4 }, rooms.Select(room => room.GetProperty("capacity").GetInt32()).ToArray());
+        Assert.Equal([50, 10, 4], [.. rooms.Select(room => room.GetProperty("capacity").GetInt32())]);
         Assert.All(rooms, room =>
         {
             Assert.True(room.TryGetProperty("id", out _));

@@ -9,7 +9,7 @@ public static class ServiceCollectionExtensions
         this IServiceCollection services,
         string connectionString)
     {
-        services.AddDbContext<RoomBookingDbContext>(options =>
+        _ = services.AddDbContext<RoomBookingDbContext>(options =>
             options.UseSqlite(connectionString));
 
         return services;

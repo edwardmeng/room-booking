@@ -16,25 +16,25 @@ internal sealed class WebApplicationFactory(Action<IServiceCollection>? configur
         new DateTimeOffset(2026, 10, 5, 2, 0, 0, TimeSpan.Zero));
 
     public string ConnectionString => $"Data Source={_databasePath};Foreign Keys=True;Pooling=False";
-    
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.UseEnvironment("Testing");
-        builder.ConfigureAppConfiguration((_, configuration) =>
+        _ = builder.UseEnvironment("Testing");
+        _ = builder.ConfigureAppConfiguration((context, configuration) =>
         {
-            configuration.AddInMemoryCollection(new Dictionary<string, string?>
+            _ = configuration.AddInMemoryCollection(new Dictionary<string, string?>
             {
                 ["ConnectionStrings:RoomBooking"] = ConnectionString
             });
         });
-        builder.ConfigureServices(services =>
+        _ = builder.ConfigureServices(services =>
         {
-            services.RemoveAll<RoomBookingDbContext>();
-            services.RemoveAll<DbContextOptions<RoomBookingDbContext>>();
-            services.RemoveAll<IDbContextOptionsConfiguration<RoomBookingDbContext>>();
-            services.AddRoomBookingDataAccess(ConnectionString);
-            services.RemoveAll<TimeProvider>();
-            services.AddSingleton(_timeProvider);
+            _ = services.RemoveAll<RoomBookingDbContext>();
+            _ = services.RemoveAll<DbContextOptions<RoomBookingDbContext>>();
+            _ = services.RemoveAll<IDbContextOptionsConfiguration<RoomBookingDbContext>>();
+            _ = services.AddRoomBookingDataAccess(ConnectionString);
+            _ = services.RemoveAll<TimeProvider>();
+            _ = services.AddSingleton(_timeProvider);
             configureServices?.Invoke(services);
         });
     }

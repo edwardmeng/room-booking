@@ -12,8 +12,8 @@ public sealed class ErrorHandlingTests
     {
         await using var factory = new WebApplicationFactory(services =>
         {
-            services.RemoveAll<IRoomService>();
-            services.AddScoped<IRoomService, ThrowingRoomService>();
+            _ = services.RemoveAll<IRoomService>();
+            _ = services.AddScoped<IRoomService, ThrowingRoomService>();
         });
         using var client = factory.CreateClient();
 

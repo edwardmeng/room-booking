@@ -43,7 +43,7 @@ public sealed class ReservationServiceTests
             CreateReservationEntity(1, "Earlier", FutureDate, 540, 600),
             CreateReservationEntity(2, "Other room", FutureDate, 480, 540),
             CreateReservationEntity(1, "Other date", FutureDate.AddDays(1), 480, 540));
-        await host.DbContext.SaveChangesAsync();
+        _ = await host.DbContext.SaveChangesAsync();
         var service = host.GetRequiredService<IReservationService>();
 
         var result = await service.ListForRoomAsync(1, FutureDate, CancellationToken.None);
@@ -60,8 +60,8 @@ public sealed class ReservationServiceTests
     {
         await using var host = await CreateHostAsync();
         var entity = CreateReservationEntity(1, "Architecture review", FutureDate, 485, 555);
-        host.DbContext.Reservations.Add(entity);
-        await host.DbContext.SaveChangesAsync();
+        _ = host.DbContext.Reservations.Add(entity);
+        _ = await host.DbContext.SaveChangesAsync();
         host.DbContext.ChangeTracker.Clear();
         var service = host.GetRequiredService<IReservationService>();
 
@@ -95,7 +95,7 @@ public sealed class ReservationServiceTests
         await using var host = await CreateHostAsync();
         var service = host.GetRequiredService<IReservationService>();
 
-        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() =>
+        _ = await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() =>
             service.CreateAsync(CreateReservationRequest(roomId: 0), CancellationToken.None));
 
         Assert.Equal(0, await host.DbContext.Reservations.CountAsync());
@@ -112,7 +112,7 @@ public sealed class ReservationServiceTests
             start: new TimeOnly(startHour, startMinute),
             end: new TimeOnly(endHour, endMinute));
 
-        await Assert.ThrowsAsync<ArgumentException>(() =>
+        _ = await Assert.ThrowsAsync<ArgumentException>(() =>
             service.CreateAsync(request, CancellationToken.None));
 
         Assert.Equal(0, await host.DbContext.Reservations.CountAsync());
@@ -130,7 +130,7 @@ public sealed class ReservationServiceTests
             start: new TimeOnly(startHour, startMinute),
             end: new TimeOnly(3, 0));
 
-        await Assert.ThrowsAsync<ArgumentException>(() =>
+        _ = await Assert.ThrowsAsync<ArgumentException>(() =>
             service.CreateAsync(request, CancellationToken.None));
 
         Assert.Equal(0, await host.DbContext.Reservations.CountAsync());
@@ -160,8 +160,8 @@ public sealed class ReservationServiceTests
         int requestedEnd)
     {
         await using var host = await CreateHostAsync();
-        host.DbContext.Reservations.Add(CreateReservationEntity(1, "Existing", FutureDate, 600, 660));
-        await host.DbContext.SaveChangesAsync();
+        _ = host.DbContext.Reservations.Add(CreateReservationEntity(1, "Existing", FutureDate, 600, 660));
+        _ = await host.DbContext.SaveChangesAsync();
         host.DbContext.ChangeTracker.Clear();
         var service = host.GetRequiredService<IReservationService>();
         var request = CreateReservationRequest(
@@ -183,8 +183,8 @@ public sealed class ReservationServiceTests
         int requestedEnd)
     {
         await using var host = await CreateHostAsync();
-        host.DbContext.Reservations.Add(CreateReservationEntity(1, "Existing", FutureDate, 600, 660));
-        await host.DbContext.SaveChangesAsync();
+        _ = host.DbContext.Reservations.Add(CreateReservationEntity(1, "Existing", FutureDate, 600, 660));
+        _ = await host.DbContext.SaveChangesAsync();
         host.DbContext.ChangeTracker.Clear();
         var service = host.GetRequiredService<IReservationService>();
         var request = CreateReservationRequest(
@@ -206,7 +206,7 @@ public sealed class ReservationServiceTests
         Assert.Equal(UtcNow.UtcDateTime, persisted.CreatedAt);
         Assert.Equal(DateTimeKind.Utc, result.Reservation.CreatedAt.Kind);
     }
-    
+
     private static Task<ServiceTestHost> CreateHostAsync() =>
         ServiceTestHost.CreateAsync(new TestTimeProvider(UtcNow, TimeZoneInfo.Utc));
 

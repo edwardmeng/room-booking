@@ -35,12 +35,12 @@ internal sealed class ServiceTestHost : IAsyncDisposable
         await connection.OpenAsync();
 
         var services = new ServiceCollection();
-        services.AddSingleton(connection);
-        services.AddDbContext<RoomBookingDbContext>((provider, options) =>
+        _ = services.AddSingleton(connection);
+        _ = services.AddDbContext<RoomBookingDbContext>((provider, options) =>
             options.UseSqlite(provider.GetRequiredService<SqliteConnection>()));
-        services.AddSingleton(timeProvider ?? TimeProvider.System);
-        services.AddScoped<IRoomService, RoomService>();
-        services.AddScoped<IReservationService, ReservationService>();
+        _ = services.AddSingleton(timeProvider ?? TimeProvider.System);
+        _ = services.AddScoped<IRoomService, RoomService>();
+        _ = services.AddScoped<IReservationService, ReservationService>();
 
         var serviceProvider = services.BuildServiceProvider(new ServiceProviderOptions
         {
@@ -49,7 +49,7 @@ internal sealed class ServiceTestHost : IAsyncDisposable
         });
         var scope = serviceProvider.CreateAsyncScope();
         var host = new ServiceTestHost(connection, serviceProvider, scope);
-        await host.DbContext.Database.EnsureCreatedAsync();
+        _ = await host.DbContext.Database.EnsureCreatedAsync();
         return host;
     }
 

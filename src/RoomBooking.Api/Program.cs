@@ -1,10 +1,10 @@
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using RoomBooking.Api.Infrastructure;
 using RoomBooking.BusinessContracts;
 using RoomBooking.BusinessServices;
 using RoomBooking.DataAccess;
 using Scalar.AspNetCore;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,8 +37,8 @@ var app = builder.Build();
 await using (var scope = app.Services.CreateAsyncScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<RoomBookingDbContext>();
-    await dbContext.Database.EnsureCreatedAsync();
-    await dbContext.Database.ExecuteSqlRawAsync("PRAGMA journal_mode=WAL;");
+    _ = await dbContext.Database.EnsureCreatedAsync();
+    _ = await dbContext.Database.ExecuteSqlRawAsync("PRAGMA journal_mode=WAL;");
 }
 
 app.UseExceptionHandler();
@@ -77,8 +77,8 @@ app.UseStatusCodePages(async statusCodeContext =>
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
-    app.MapScalarApiReference();
+    _ = app.MapOpenApi();
+    _ = app.MapScalarApiReference();
 }
 
 app.MapControllers();

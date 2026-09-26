@@ -6,14 +6,9 @@ namespace RoomBooking.Api.Controllers;
 
 [ApiController]
 [Route("api/v1/rooms")]
-public sealed class RoomController : ControllerBase
+public sealed class RoomController(IRoomService roomService) : ControllerBase
 {
-    private readonly IRoomService _roomService;
-
-    public RoomController(IRoomService roomService)
-    {
-        _roomService = roomService;
-    }
+    private readonly IRoomService _roomService = roomService;
 
     [HttpGet(Name = "ListRooms")]
     [ProducesResponseType<RoomData[]>(StatusCodes.Status200OK)]

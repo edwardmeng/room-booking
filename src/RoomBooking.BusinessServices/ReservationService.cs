@@ -6,20 +6,13 @@ using RoomBooking.DataAccess.Entities;
 
 namespace RoomBooking.BusinessServices;
 
-public sealed class ReservationService : IReservationService
+public sealed class ReservationService(
+    RoomBookingDbContext dbContext,
+    TimeProvider timeProvider, IRoomService roomService) : IReservationService
 {
-    private readonly IRoomService _roomService;
-    private readonly RoomBookingDbContext _dbContext;
-    private readonly TimeProvider _timeProvider;
-
-    public ReservationService(
-        RoomBookingDbContext dbContext,
-        TimeProvider timeProvider, IRoomService roomService)
-    {
-        _dbContext = dbContext;
-        _timeProvider = timeProvider;
-        _roomService = roomService;
-    }
+    private readonly IRoomService _roomService = roomService;
+    private readonly RoomBookingDbContext _dbContext = dbContext;
+    private readonly TimeProvider _timeProvider = timeProvider;
 
     public async Task<RoomScheduleResult> ListForRoomAsync(
         int roomId,
@@ -39,7 +32,7 @@ public sealed class ReservationService : IReservationService
             .OrderBy(reservation => reservation.StartMinute)
             .ToArrayAsync(cancellationToken);
 
-        return new RoomScheduleResult(true, rows.Select(MapToModel).ToArray());
+        return new RoomScheduleResult(true, [.. rows.Select(MapToModel)]);
     }
 
     public async Task<ReservationModel?> GetByIdAsync(
@@ -83,8 +76,8 @@ public sealed class ReservationService : IReservationService
                 null);
         }
 
-        var requestedStart = request.Start.Hour * 60 + request.Start.Minute;
-        var requestedEnd = request.End.Hour * 60 + request.End.Minute;
+        var requestedStart = (request.Start.Hour * 60) + request.Start.Minute;
+        var requestedEnd = (request.End.Hour * 60) + request.End.Minute;
         var overlaps = await _dbContext.Reservations
             .AsNoTracking()
             .AnyAsync(
@@ -112,8 +105,8 @@ public sealed class ReservationService : IReservationService
             CreatedAt = _timeProvider.GetUtcNow().UtcDateTime
         };
 
-        await _dbContext.Reservations.AddAsync(entity, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        _ = await _dbContext.Reservations.AddAsync(entity, cancellationToken);
+        _ = await _dbContext.SaveChangesAsync(cancellationToken);
 
         return new CreateReservationResult(CreateReservationOutcome.Created, MapToModel(entity));
     }

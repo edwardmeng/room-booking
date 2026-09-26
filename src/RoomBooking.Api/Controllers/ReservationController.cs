@@ -10,20 +10,14 @@ namespace RoomBooking.Api.Controllers;
 
 [ApiController]
 [Route("api/v1")]
-public sealed class ReservationController : ControllerBase
+public sealed class ReservationController(
+    IReservationService reservationService,
+    TimeProvider timeProvider) : ControllerBase
 {
-    private readonly IReservationService _reservationService;
-    private readonly TimeProvider _timeProvider;
+    private readonly IReservationService _reservationService = reservationService;
+    private readonly TimeProvider _timeProvider = timeProvider;
     private const string DateFormat = "yyyy-MM-dd";
     private const string TimeFormat = "HH:mm";
-
-    public ReservationController(
-        IReservationService reservationService,
-        TimeProvider timeProvider)
-    {
-        _reservationService = reservationService;
-        _timeProvider = timeProvider;
-    }
 
     [HttpGet("reservations", Name = "ListRoomReservations")]
     [ProducesResponseType<ReservationData[]>(StatusCodes.Status200OK)]
@@ -60,17 +54,14 @@ public sealed class ReservationController : ControllerBase
             parsedDate,
             cancellationToken);
 
-        if (!result.RoomExists)
-        {
-            return ApiProblems.Create(
+        return !result.RoomExists
+            ? (ActionResult<ReservationData[]>)ApiProblems.Create(
                 HttpContext,
                 StatusCodes.Status404NotFound,
                 "ROOM_NOT_FOUND",
                 "The room was not found.",
-                "Choose an existing room and retry.");
-        }
-
-        return Ok(result.Reservations.Select(MapToData).ToArray());
+                "Choose an existing room and retry.")
+            : (ActionResult<ReservationData[]>)Ok(result.Reservations.Select(MapToData).ToArray());
     }
 
     [HttpGet("reservations/{id:int}", Name = "GetReservationById")]

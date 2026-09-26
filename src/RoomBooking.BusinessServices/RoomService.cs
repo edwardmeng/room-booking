@@ -5,14 +5,9 @@ using RoomBooking.DataAccess.Entities;
 
 namespace RoomBooking.BusinessServices;
 
-public sealed class RoomService : IRoomService
+public sealed class RoomService(RoomBookingDbContext dbContext) : IRoomService
 {
-    private readonly RoomBookingDbContext _dbContext;
-
-    public RoomService(RoomBookingDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
+    private readonly RoomBookingDbContext _dbContext = dbContext;
 
     public async Task<RoomModel[]> ListRoomsAsync(CancellationToken cancellationToken)
     {
@@ -20,7 +15,7 @@ public sealed class RoomService : IRoomService
             .AsNoTracking()
             .OrderBy(room => room.Name)
             .ToArrayAsync(cancellationToken);
-        return entities.Select(MapToModel).ToArray();
+        return [.. entities.Select(MapToModel)];
     }
 
     public async Task<RoomModel?> GetByIdAsync(int id, CancellationToken cancellationToken)

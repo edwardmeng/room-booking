@@ -8,31 +8,31 @@ public sealed class RoomEntityConfiguration : IEntityTypeConfiguration<RoomEntit
 {
     public void Configure(EntityTypeBuilder<RoomEntity> builder)
     {
-        builder.ToTable("Rooms", table =>
+        _ = builder.ToTable("Rooms", table =>
             table.HasCheckConstraint("CK_Rooms_Capacity", "Capacity > 0"));
 
-        builder.HasKey(room => room.Id)
+        _ = builder.HasKey(room => room.Id)
             .HasName("PK_Rooms");
 
-        builder.Property(room => room.Name)
+        _ = builder.Property(room => room.Name)
             .HasColumnType("TEXT")
             .HasMaxLength(200)
             .IsRequired();
 
-        builder.Property(room => room.Location)
+        _ = builder.Property(room => room.Location)
             .HasColumnType("TEXT")
             .HasMaxLength(200)
             .IsRequired();
 
-        builder.Property(room => room.Description)
+        _ = builder.Property(room => room.Description)
             .HasColumnType("TEXT")
             .HasMaxLength(1000);
 
-        builder.Property(room => room.Capacity)
+        _ = builder.Property(room => room.Capacity)
             .HasColumnType("INTEGER")
             .IsRequired();
 
-        builder.HasData(
+        _ = builder.HasData(
             new RoomEntity
             {
                 Id = 1,

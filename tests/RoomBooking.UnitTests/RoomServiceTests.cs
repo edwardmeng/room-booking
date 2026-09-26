@@ -9,14 +9,14 @@ public sealed class RoomServiceTests
     public async Task ListRoomsAsync_ReturnsAllRoomsOrderedByName()
     {
         await using var host = await ServiceTestHost.CreateAsync();
-        host.DbContext.Rooms.Add(new RoomEntity
+        _ = host.DbContext.Rooms.Add(new RoomEntity
         {
             Name = "Alpha room",
             Location = "North wing",
             Description = "Interview room",
             Capacity = 6
         });
-        await host.DbContext.SaveChangesAsync();
+        _ = await host.DbContext.SaveChangesAsync();
         host.DbContext.ChangeTracker.Clear();
         var service = host.GetRequiredService<IRoomService>();
 

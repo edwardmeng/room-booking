@@ -27,7 +27,7 @@ public sealed class ReservationEndpointTests
         var reservations = document.RootElement.EnumerateArray().ToArray();
 
         Assert.Equal(new[] { "09:00", "10:00", "11:00" }, reservations.Select(item => item.GetProperty("start").GetString()).ToArray());
-        Assert.Equal(new[] { first, second, third }, reservations.Select(item => item.GetProperty("id").GetInt32()).ToArray());
+        Assert.Equal([first, second, third], [.. reservations.Select(item => item.GetProperty("id").GetInt32())]);
     }
 
     [Theory]
@@ -182,7 +182,8 @@ public sealed class ReservationEndpointTests
         var response = await client.PostAsync(
             "/api/v1/reservations",
             HttpClientUtils.JsonContent(
-                """
+                                     /*lang=json,strict*/
+                                     """
                 {"room":0,"title":"Planning","date":"invalid","start":"25:00","end":"09:00"}
                 """));
 
@@ -207,7 +208,8 @@ public sealed class ReservationEndpointTests
         var response = await client.PostAsync(
             "/api/v1/reservations",
             HttpClientUtils.JsonContent(
-                """
+                                     /*lang=json,strict*/
+                                     """
                 {"room":1,"date":"2026-10-06","start":"10:00","end":"11:00"}
                 """));
 
@@ -221,10 +223,10 @@ public sealed class ReservationEndpointTests
 
     [Theory]
     [InlineData("{\"room\":1")]
-    [InlineData("{\"room\":1,\"title\":\"Planning\",\"date\":\"2026-10-06\",\"start\":\"10:00\",\"end\":\"11:00\",\"unknown\":true}")]
-    [InlineData("{\"Room\":1,\"title\":\"Planning\",\"date\":\"2026-10-06\",\"start\":\"10:00\",\"end\":\"11:00\"}")]
-    [InlineData("{\"room\":\"1\",\"title\":\"Planning\",\"date\":\"2026-10-06\",\"start\":\"10:00\",\"end\":\"11:00\"}")]
-    [InlineData("{\"room\":1,\"room\":2,\"title\":\"Planning\",\"date\":\"2026-10-06\",\"start\":\"10:00\",\"end\":\"11:00\"}")]
+    [InlineData(/*lang=json,strict*/ "{\"room\":1,\"title\":\"Planning\",\"date\":\"2026-10-06\",\"start\":\"10:00\",\"end\":\"11:00\",\"unknown\":true}")]
+    [InlineData(/*lang=json,strict*/ "{\"Room\":1,\"title\":\"Planning\",\"date\":\"2026-10-06\",\"start\":\"10:00\",\"end\":\"11:00\"}")]
+    [InlineData(/*lang=json,strict*/ "{\"room\":\"1\",\"title\":\"Planning\",\"date\":\"2026-10-06\",\"start\":\"10:00\",\"end\":\"11:00\"}")]
+    [InlineData(/*lang=json,strict*/ "{\"room\":1,\"room\":2,\"title\":\"Planning\",\"date\":\"2026-10-06\",\"start\":\"10:00\",\"end\":\"11:00\"}")]
     public async Task MalformedOrNonContractJson_ReturnsValidationProblem(string payload)
     {
         await using var factory = new WebApplicationFactory();
@@ -284,7 +286,7 @@ public sealed class ReservationEndpointTests
     {
         await using var factory = new WebApplicationFactory();
         using var client = factory.CreateClient();
-        await IntegrationTestSupport.CreateReservationAsync(
+        _ = await IntegrationTestSupport.CreateReservationAsync(
             client,
             1,
             "Confidential candidate",
@@ -303,7 +305,7 @@ public sealed class ReservationEndpointTests
             "ROOM_TIME_CONFLICT");
         Assert.DoesNotContain("Confidential candidate", payload);
         Assert.DoesNotContain("10:00", payload);
-        Assert.Single(await IntegrationTestSupport.GetScheduleAsync(client, 1, FutureDate));
+        _ = Assert.Single(await IntegrationTestSupport.GetScheduleAsync(client, 1, FutureDate));
     }
 
     [Theory]
@@ -313,7 +315,7 @@ public sealed class ReservationEndpointTests
     {
         await using var factory = new WebApplicationFactory();
         using var client = factory.CreateClient();
-        await IntegrationTestSupport.CreateReservationAsync(
+        _ = await IntegrationTestSupport.CreateReservationAsync(
             client,
             1,
             "Existing",

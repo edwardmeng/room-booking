@@ -37,7 +37,7 @@ internal static class IntegrationTestSupport
             $"/api/v1/reservations?room={roomId}&date={date:yyyy-MM-dd}");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         using var document = await response.ReadAsJsonAsync();
-        return document.RootElement.EnumerateArray().Select(item => item.Clone()).ToArray();
+        return [.. document.RootElement.EnumerateArray().Select(item => item.Clone())];
     }
 
     public static async Task AssertProblemAsync(
