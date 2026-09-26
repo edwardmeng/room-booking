@@ -12,8 +12,6 @@ This repository contains the implemented .NET 10 room-booking API. It uses ASP.N
 - `RoomBooking.UnitTests`: executable business-rule and service tests.
 - `RoomBooking.IntegrationTests`: executable HTTP API tests; test cases interact with the application through `HttpClient`.
 
-Client Models remain in `RoomBooking.Api` because Phase 1 has one HTTP host and no shared client SDK. A separate transport-contract assembly is justified only when another independently versioned consumer needs those CLR types.
-
 ## Commands
 
 ```powershell
