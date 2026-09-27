@@ -4,8 +4,12 @@ using RoomBooking.DataAccess.Entities;
 
 namespace RoomBooking.DataAccess.Configurations;
 
+/// <summary>
+/// Configures persistence and seed data for room entities.
+/// </summary>
 public sealed class RoomEntityConfiguration : IEntityTypeConfiguration<RoomEntity>
 {
+    /// <inheritdoc />
     public void Configure(EntityTypeBuilder<RoomEntity> builder)
     {
         _ = builder.ToTable("Rooms", table =>

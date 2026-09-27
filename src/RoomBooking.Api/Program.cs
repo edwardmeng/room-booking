@@ -85,4 +85,7 @@ app.MapControllers();
 
 app.Run();
 
+/// <summary>
+/// Provides the application entry point type for integration hosting.
+/// </summary>
 public partial class Program;

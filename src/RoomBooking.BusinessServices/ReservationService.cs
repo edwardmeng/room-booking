@@ -6,6 +6,12 @@ using RoomBooking.DataAccess.Entities;
 
 namespace RoomBooking.BusinessServices;
 
+/// <summary>
+/// Provides reservation queries and creation backed by the room booking database.
+/// </summary>
+/// <param name="dbContext">The room booking database context.</param>
+/// <param name="timeProvider">The source of the current time.</param>
+/// <param name="roomService">The service used to resolve rooms.</param>
 public sealed class ReservationService(
     RoomBookingDbContext dbContext,
     TimeProvider timeProvider, IRoomService roomService) : IReservationService
@@ -14,6 +20,7 @@ public sealed class ReservationService(
     private readonly RoomBookingDbContext _dbContext = dbContext;
     private readonly TimeProvider _timeProvider = timeProvider;
 
+    /// <inheritdoc />
     public async Task<RoomScheduleResult> ListForRoomAsync(
         int roomId,
         DateOnly date,
@@ -35,6 +42,7 @@ public sealed class ReservationService(
         return new RoomScheduleResult(true, [.. rows.Select(MapToModel)]);
     }
 
+    /// <inheritdoc />
     public async Task<ReservationModel?> GetByIdAsync(
         int id,
         CancellationToken cancellationToken)
@@ -47,6 +55,7 @@ public sealed class ReservationService(
         return row is null ? null : MapToModel(row);
     }
 
+    /// <inheritdoc />
     public async Task<CreateReservationResult> CreateAsync(
         CreateReservationModel request,
         CancellationToken cancellationToken)

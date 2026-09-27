@@ -5,10 +5,15 @@ using RoomBooking.DataAccess.Entities;
 
 namespace RoomBooking.BusinessServices;
 
+/// <summary>
+/// Provides room queries backed by the room booking database.
+/// </summary>
+/// <param name="dbContext">The room booking database context.</param>
 public sealed class RoomService(RoomBookingDbContext dbContext) : IRoomService
 {
     private readonly RoomBookingDbContext _dbContext = dbContext;
 
+    /// <inheritdoc />
     public async Task<RoomModel[]> ListRoomsAsync(CancellationToken cancellationToken)
     {
         var entities = await _dbContext.Rooms
@@ -18,6 +23,7 @@ public sealed class RoomService(RoomBookingDbContext dbContext) : IRoomService
         return [.. entities.Select(MapToModel)];
     }
 
+    /// <inheritdoc />
     public async Task<RoomModel?> GetByIdAsync(int id, CancellationToken cancellationToken)
     {
         var entity = await _dbContext.Rooms.AsNoTracking()

@@ -4,8 +4,12 @@ using RoomBooking.DataAccess.Entities;
 
 namespace RoomBooking.DataAccess.Configurations;
 
+/// <summary>
+/// Configures persistence for reservation entities.
+/// </summary>
 public sealed class ReservationEntityConfiguration : IEntityTypeConfiguration<ReservationEntity>
 {
+    /// <inheritdoc />
     public void Configure(EntityTypeBuilder<ReservationEntity> builder)
     {
         _ = builder.ToTable("Reservations", table =>

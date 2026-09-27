@@ -8,6 +8,11 @@ using CreateReservationRequest = RoomBooking.Api.ApiModels.CreateReservationRequ
 
 namespace RoomBooking.Api.Controllers;
 
+/// <summary>
+/// Exposes HTTP operations for querying and creating reservations.
+/// </summary>
+/// <param name="reservationService">The reservation application service.</param>
+/// <param name="timeProvider">The source of the current time used for request validation.</param>
 [ApiController]
 [Route("api/v1")]
 public sealed class ReservationController(
@@ -19,6 +24,13 @@ public sealed class ReservationController(
     private const string DateFormat = "yyyy-MM-dd";
     private const string TimeFormat = "HH:mm";
 
+    /// <summary>
+    /// Lists a room's reservations for a date.
+    /// </summary>
+    /// <param name="room">The room identifier.</param>
+    /// <param name="date">The date in <c>yyyy-MM-dd</c> format.</param>
+    /// <param name="cancellationToken">The token used to cancel the operation.</param>
+    /// <returns>The scheduled reservations or a problem response.</returns>
     [HttpGet("reservations", Name = "ListRoomReservations")]
     [ProducesResponseType<ReservationData[]>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
@@ -64,6 +76,12 @@ public sealed class ReservationController(
             : (ActionResult<ReservationData[]>)Ok(result.Reservations.Select(MapToData).ToArray());
     }
 
+    /// <summary>
+    /// Gets a reservation by its identifier.
+    /// </summary>
+    /// <param name="id">The reservation identifier.</param>
+    /// <param name="cancellationToken">The token used to cancel the operation.</param>
+    /// <returns>The reservation or a problem response.</returns>
     [HttpGet("reservations/{id:int}", Name = "GetReservationById")]
     [ProducesResponseType<ReservationData>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
@@ -92,6 +110,12 @@ public sealed class ReservationController(
             : Ok(MapToData(reservation));
     }
 
+    /// <summary>
+    /// Creates a room reservation.
+    /// </summary>
+    /// <param name="request">The reservation request payload.</param>
+    /// <param name="cancellationToken">The token used to cancel the operation.</param>
+    /// <returns>The created reservation or a problem response.</returns>
     [HttpPost("reservations", Name = "CreateReservation")]
     [Consumes("application/json")]
     [ProducesResponseType<ReservationData>(StatusCodes.Status201Created)]
